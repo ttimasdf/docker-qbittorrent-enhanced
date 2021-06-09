@@ -41,6 +41,44 @@ Find us at:
 
 The [Qbittorrent](https://www.qbittorrent.org/) project aims to provide an open-source software alternative to µTorrent. qBittorrent is based on the Qt toolkit and libtorrent-rasterbar library.
 
+## Changes of this fork
+
+build qbittorrent-enhanced instead of original qbittorrent (x86 only).
+
+Example docker-compose.yml
+
+```yaml
+version: "2.1"
+services:
+  qbittorrent:
+    # image: linuxserver/qbittorrent:latest
+    # image: linuxserver/qbittorrent:version-14.3.3.99202101191832-7248-da0b276d5ubuntu18.04.1
+    image: ttimasdf/qbittorrent-enhanced:4.3.5.10
+    build:
+      context: ./docker-qbittorrent-enhanced
+      args:
+        - VERSION=4.3.5.10
+        - QBITTORRENT_VERSION=4.3.5.10-1ppa1~focal1
+    container_name: qbittorrent
+    environment:
+      - PUID=110
+      - PGID=1000
+      - UMASK=002
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8080
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
+    ports:
+      # bittorrent inbounds
+      - 12345:12345
+      - 12345:12345/udp
+      # webui port
+      - 8080:8080
+    restart: unless-stopped
+```
+
+
 [![qbittorrent](https://github.com/linuxserver/docker-templates/raw/master/linuxserver.io/img/qbittorrent-icon.png)](https://www.qbittorrent.org/)
 
 ## Supported Architectures
@@ -68,22 +106,22 @@ This image provides various versions that are available via tags. `latest` tag u
 
 ## Application Setup
 
-The webui is at `<your-ip>:8080` and the default username/password is `admin/adminadmin`.  
+The webui is at `<your-ip>:8080` and the default username/password is `admin/adminadmin`.
 
-Change username/password via the webui in the webui section of settings.  
+Change username/password via the webui in the webui section of settings.
 
 
 ### WEBUI_PORT variable
 
-Due to issues with CSRF and port mapping, should you require to alter the port for the webui you need to change both sides of the -p 8080 switch AND set the WEBUI_PORT variable to the new port.  
+Due to issues with CSRF and port mapping, should you require to alter the port for the webui you need to change both sides of the -p 8080 switch AND set the WEBUI_PORT variable to the new port.
 
-For example, to set the port to 8090 you need to set -p 8090:8090 and -e WEBUI_PORT=8090  
+For example, to set the port to 8090 you need to set -p 8090:8090 and -e WEBUI_PORT=8090
 
-This should alleviate the "white screen" issue.  
+This should alleviate the "white screen" issue.
 
-If you have no webui , check the file /config/qBittorrent/qBittorrent.conf  
+If you have no webui , check the file /config/qBittorrent/qBittorrent.conf
 
-edit or add the following lines  
+edit or add the following lines
 
 ```
 WebUI\Address=*
