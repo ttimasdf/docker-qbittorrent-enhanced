@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
 
 # set version label
 ARG BUILD_DATE
@@ -21,11 +21,11 @@ RUN \
     gnupg \
     python3 && \
   apt-key adv --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys 85C74020DD8EC23BC1C66A2EE7EF898565121492 && \
-  echo "deb http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu focal main" >> /etc/apt/sources.list.d/qbitorrent.list && \
-  echo "deb-src http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu focal main" >> /etc/apt/sources.list.d/qbitorrent.list && \
+  echo "deb http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu jammy main" >> /etc/apt/sources.list.d/qbitorrent.list && \
+  echo "deb-src http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu jammy main" >> /etc/apt/sources.list.d/qbitorrent.list && \
   echo "**** install packages ****" && \
   if [ -z ${QBITTORRENT_VERSION+x} ]; then \
-    QBITTORRENT_VERSION=$(curl -sX GET http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu/dists/focal/main/binary-amd64/Packages.gz | gunzip -c \
+    QBITTORRENT_VERSION=$(curl -sX GET http://ppa.launchpad.net/poplite/qbittorrent-enhanced/ubuntu/dists/jammy/main/binary-amd64/Packages.gz | gunzip -c \
     |grep -A 7 -m 1 "Package: qbittorrent-enhanced-nox" | awk -F ": " '/Version/{print $2;exit}');\
   fi && \
   apt-get update && \
